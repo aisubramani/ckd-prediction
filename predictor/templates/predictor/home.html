@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <title>CKD Prediction</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e0f7fa, #f3e5f5);
+        }
+
+        header {
+            background: linear-gradient(90deg, #0d47a1, #1976d2, #42a5f5);
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border-bottom: 10px solid #165bc2ff;
+            animation: gradientShift 5s ease infinite;
+            background-size: 300% 300%;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        header h1 {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            font-size: 1.7em;
+            letter-spacing: 1.4px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 40px auto 80px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .container h2 {
+            text-align: center;
+            color: #1e88e5;
+            margin-bottom: 15px;
+        }
+
+        /* 🔹 Top Sample Buttons */
+        .sample-buttons-top {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .sample-buttons-top button {
+            background-color: #00bfa5;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            font-size: 13px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 3px;
+            transition: 0.3s;
+        }
+
+        .sample-buttons-top button:hover {
+            background-color: #009e8e;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+        small {
+            display: block;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 4px;
+            border-radius: 7px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .predict-btn {
+            background-color: #1e88e5;
+            color: white;
+        }
+
+        .clear-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button-group button {
+            flex: 1;
+        }
+
+        h3 {
+            color: green;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        footer {
+            background-color: #1e88e5;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1> 🩺👨‍⚕️ Ai - Chronic Kidney Disease Prediction Tool</h1>
+    
+</header>
+
+
+<div class="container">
+    <!-- About Link -->
+<div style="text-align: center; margin-top: 5px;">
+    <a href="#" id="aboutLink" class="about-link">
+        ℹ️ About This Tool
+    </a>
+    <style>
+    .about-link {
+        text-decoration: none;
+        color: #006be4ff;
+        font-weight: bold;
+        transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .about-link:hover {
+        color: #00bfa5; /* Change color on hover */
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.3); /* Optional glow effect */
+    }
+    </style>
+</div>
+
+<!-- Modal Background -->
+<div id="aboutModal" style="
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+">
+    <!-- Modal Content -->
+    <div style="
+        background: #fff;
+        padding: 25px 30px;
+        border-radius: 12px;
+        max-width: 650px;
+        width: 90%;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        text-align: left;
+    ">
+        <h3 style="color: #0077b6; text-align: center;">About This Ai CKD Prediction Tool</h3>
+        <p>
+            This Ai web application predicts the likelihood of 
+            <strong>Chronic Kidney Disease (CKD)</strong> using patient medical data.
+            CKD  is a condition characterized by gradual loss of kidney function over time. 
+            Early detection is crucial for preventing serious health complications.
+
+        </p>
+
+       
+
+        <ul style="line-height: 1.8; font-size: 12.5px;"> 
+            <li>📊 <strong>Dataset:</strong> 400 patient records- containing 24 clinical features.</li>
+            <li>🧠 <strong>Algorithm:</strong> Random Forest Classification-a machine learning model 80% trained to identify CKD patterns. </li>
+            <li>🔍 <strong> Feature Selection:</strong>From 24 input features, 6 key predictors were selected using SelectKBest (scikit-learn)</li>
+            <li>📈 <strong>Model Accuracy:</strong>Test dataset: Accuracy: 97.5% | 🚀 ROC-AUC Score: 99.72% </li>
+            <li>⚙️ <strong>Framework:</strong> Developed using Python Django, Scikit-learn, Pandas and Numpy</li>
+            <li>🩺 <strong>Purpose:</strong> Early CKD detection based on clinical indicators such as Albumin level in urine, Blood glucose random , Blood urea , Serum creatinine, Packed cell volume and White blood cell count.     </li>
+            <li>👨‍💻 Project Developed & Designed by <a href="https://www.linkedin.com/in/dr-subramani-suresh-b2582b55/" target="_blank" style="color:#0077b6; text-decoration:none;"><strong> Dr. Subramani 🔗</strong> </a></li>
+        </ul>
+
+        <p style="font-style: italic; color: #555; font-size: 10px;">
+            ⚠️ This tool is for educational and early-detection support purposes only.
+            It should not replace professional medical diagnosis.
+        </p>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <button id="closeModal" style="
+                background-color: #0077b6;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 8px;
+                cursor: pointer;
+            ">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Script -->
+<script>
+    const modal = document.getElementById('aboutModal');
+    const link = document.getElementById('aboutLink');
+    const closeBtn = document.getElementById('closeModal');
+
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        modal.style.display = 'flex';
+    });
+
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+
+    // Close modal if user clicks outside the box
+    window.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+</script>
+
+
+
+    <h2>Enter Patient Details</h2>
+
+    <!-- 🔹 Small Top Sample Buttons -->
+    <div class="sample-buttons-top">
+        <button type="button" onclick="loadNormalSample()">Load Normal Sample</button> </br></br>
+        <button type="button" onclick="loadCKDSample()">Load CKD Sample</button>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% if result %}
+        <h3><p>{{ result|safe }}</p></h3>
+    {% endif %}
+
+        <label>Albumin Level:</label>
+        <small>Normal Range: 3.4 – 5.4 g/dL</small>
+        <input type="number" step="0.1" name="albumin_level" id="albumin_level" required value="{{ form_data.albumin_level }}">
+
+        <label>Blood Glucose Random:</label>
+        <small>Normal Range: 70 – 140 mg/dL</small>
+        <input type="number" step="0.1" name="blood_glucose_random" id="blood_glucose_random" required value="{{ form_data.blood_glucose_random }}">
+
+        <label>Blood Urea:</label>
+        <small>Normal Range: 7 – 20 mg/dL</small>
+        <input type="number" step="0.1" name="blood_urea" id="blood_urea" required value="{{ form_data.blood_urea }}">
+
+        <label>Serum Creatinine:</label>
+        <small>Normal Range: 0.6 – 1.3 mg/dL</small>
+        <input type="number" step="0.1" name="serum_creatinine" id="serum_creatinine" required value="{{ form_data.serum_creatinine }}">
+
+        <label>Packed Cell Volume:</label>
+        <small>Normal Range: 40 – 50 %</small>
+        <input type="number" step="0.1" name="packed_cell_volume" id="packed_cell_volume" required value="{{ form_data.packed_cell_volume }}">
+
+        <label>White Blood Cell Count:</label>
+        <small>Normal Range: 4000 – 11000 /µL</small>
+        <input type="number" step="1" name="White_blood_cell_count" id="White_blood_cell_count" required value="{{ form_data.White_blood_cell_count }}">
+
+        <!-- 🔹 Predict / Clear Buttons -->
+        <div class="button-group">
+            <button type="submit" class="predict-btn">Predict</button>
+            <button type="submit" name="clear" value="1" class="clear-btn">Clear</button>
+        </div>
+    </form>
+
+    
+</div>
+
+<footer>
+    &copy; 2025 CKD Prediction Portal | Ai Project by <a href="https://www.linkedin.com/in/dr-subramani-suresh-b2582b55/" target="_blank" style="color:white; text-decoration:none;"><strong> Dr. Subramani 🔗</strong> </a>
+</footer>
+
+<!-- 🔹 JavaScript for Sample Data -->
+<script>
+    function loadNormalSample() {
+        document.getElementById('albumin_level').value = 0;
+        document.getElementById('blood_glucose_random').value = 100;
+        document.getElementById('blood_urea').value = 26;
+        document.getElementById('serum_creatinine').value = 0.6;
+        document.getElementById('packed_cell_volume').value = 49;
+        document.getElementById('White_blood_cell_count').value = 6600;
+    }
+
+    function loadCKDSample() {
+        document.getElementById('albumin_level').value = 3;
+        document.getElementById('blood_glucose_random').value = 148;
+        document.getElementById('blood_urea').value = 57;
+        document.getElementById('serum_creatinine').value = 3.1;
+        document.getElementById('packed_cell_volume').value = 38;
+        document.getElementById('White_blood_cell_count').value = 8408;
+    }
+</script>
+
+</body>
+</html>
