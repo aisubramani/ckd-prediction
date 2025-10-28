@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'predictor',  # ✅ add your app
+    'insurance',       # new app for Insurance Prediction
 ]
 
 MIDDLEWARE = [
@@ -122,6 +123,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "/static/"
+
+# 👇 Add this line so Django can find your app-level static folders
+STATICFILES_DIRS = [
+    BASE_DIR / "insurance" / "static",
+    BASE_DIR / "predictor" / "static",
+]
 
 # Directory where collectstatic will collect all static files
 STATIC_ROOT = BASE_DIR / "staticfiles"

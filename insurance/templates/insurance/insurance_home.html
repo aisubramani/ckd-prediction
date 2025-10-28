@@ -1,0 +1,305 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💰 AI Insurance Cost Prediction</title>
+ <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2966/2966486.png">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(120deg, #0d47a1, #1976d2, #42a5f5);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      width: 100%;
+      text-align: center;
+      padding: 5px 5px;
+      background: url("{% static 'insurance/images/head_img.png' %}") no-repeat center center/cover;
+      color: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      border-bottom: 5px solid rgba(255, 255, 255, 0.2);
+      border-radius: 0 0 20px 20px;
+      text-shadow: 3px 3px 8px #000, 0 0 20px #00e6ff;
+    }
+
+    h1 {
+      font-size: 2rem;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    header p {
+      font-size: 1rem;
+      color: #e0f7fa;
+    }
+
+    .card {
+      background: #ffffff;
+      color: #000;
+      margin-top: 40px;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      width: 350px;
+      text-align: left;
+      transition: transform 0.3s ease;
+    }
+    .card:hover { transform: translateY(-5px); }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 16px 0;
+      border: 1px solid #90caf9;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    button {
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover { background-color: #0d47a1; transform: scale(1.02); }
+
+    .btn-row { display: flex; justify-content: space-between; }
+    .clear-btn { background-color: #b71c1c; width: 48%; }
+    .clear-btn:hover { background-color: #d32f2f; }
+
+    .info-btn {
+      display: block;
+      margin: 0 auto 15px auto;
+      background-color: #00bcd4;
+      color: #fff;
+      width: 100%;
+    }
+    .info-btn:hover { background-color: #0097a7; }
+
+    .result {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 1.2rem;
+      background: linear-gradient(90deg, #1e88e5, #42a5f5);
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* About Section */
+    .about-section {
+      margin: 50px auto;
+      width: 85%;
+      max-width: 900px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 25px 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      color: #fff;
+      text-align: left;
+      backdrop-filter: blur(10px);
+    }
+
+    .about-section h2, .about-section h3 {
+      text-align: center;
+      color: #00e6ff;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+    }
+
+    .about-section p, .about-section li {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .about-section ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .about-section ul li {
+      margin: 5px 0;
+      padding-left: 10px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      font-size: 15px;
+    }
+
+    .data-table th, .data-table td {
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    .data-table th {
+      background: rgba(0, 0, 0, 0.2);
+      color: #00e6ff;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #e0f7fa;
+    }
+
+    /* Go to Top Button */
+    #goTopBtn {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: #00e6ff;
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      padding: 12px 15px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+    #goTopBtn:hover {
+      background-color: #0097a7;
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>💰 AI-Powered Medical Insurance Cost Prediction</h1>
+    <p>Estimate your expected <strong>medical insurance cost</strong> using ML.</p>
+  </header>
+
+  <form method="POST" class="card" id="formSection">
+    {% csrf_token %}
+    <button type="button" class="info-btn" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">ℹ️ About This Tool</button>
+    <h2>Enter Your Details</h2>
+
+    {% if result %}
+      <div class="result">
+        💰 <strong>Estimated Insurance Charge:</strong> ${{ result }}
+      </div>
+    {% endif %}
+
+    <label>Age:</label>
+    <input type="number" name="age" value="{{ values.age }}" placeholder="Enter your age" required>
+
+    <label>Sex:</label>
+    <select name="sex" required>
+      <option value="">Select</option>
+      <option value="0" {% if values.sex == '0' %}selected{% endif %}>Female</option>
+      <option value="1" {% if values.sex == '1' %}selected{% endif %}>Male</option>
+    </select>
+
+    <label>BMI (Body Mass Index):</label>
+    <input type="number" step="0.1" name="bmi" value="{{ values.bmi }}" placeholder="e.g. 27.9" required>
+
+    <label>Children:</label>
+    <input type="number" name="children" value="{{ values.children }}" placeholder="Number of dependents" required>
+
+    <label>Smoker:</label>
+    <select name="smoker" required>
+      <option value="">Select</option>
+      <option value="0" {% if values.smoker == '0' %}selected{% endif %}>No</option>
+      <option value="1" {% if values.smoker == '1' %}selected{% endif %}>Yes</option>
+    </select>
+
+    <div class="btn-row">
+      <button type="submit" name="predict">🔍 Predict</button>
+      <button type="submit" name="clear" class="clear-btn">🧹 Clear</button>
+    </div>
+  </form>
+
+  <!-- About Tool Section -->
+  <section class="about-section" id="about">
+    <h2>💰 About This AI Medical Insurance Cost Prediction Tool</h2>
+    <p>
+      This AI-powered web application predicts a person's expected <b>medical insurance cost</b> 
+      using five key health and lifestyle factors — <b>Age</b>, <b>Sex</b>, <b>BMI</b>, 
+      <b>Children</b>, and <b>Smoker status</b>.
+    </p>
+
+    <h3>📊 Dataset Overview</h3>
+    <p>The dataset contains <b>1338 records</b> with 6 features:</p>
+    <table class="data-table">
+      <tr><th>Feature</th><th>Description</th></tr>
+      <tr><td>Age</td><td>Age of the individual (years)</td></tr>
+      <tr><td>Sex</td><td>Male or Female</td></tr>
+      <tr><td>BMI</td><td>Body Mass Index — a measure of body fat</td></tr>
+      <tr><td>Children</td><td>Number of children covered by insurance</td></tr>
+      <tr><td>Smoker</td><td>Whether the individual is a smoker (Yes/No)</td></tr>
+      <tr><td>Charges</td><td>Medical insurance cost in USD</td></tr>
+    </table>
+
+    <h3>🤖 Model Comparison</h3>
+    <ul>
+      <li>📈 <b>Linear Regression:</b> MAE = 4213.48 | RMSE = 5829.17 | R² = 0.78</li>
+      <li>📈 <b>Ridge Regression:</b> MAE = 4225.74 | RMSE = 5832.60 | R² = 0.78</li>
+      <li>📈 <b>Lasso Regression:</b> MAE = 4214.20 | RMSE = 5829.46 | R² = 0.78</li>
+      <li>🌲 <b>Random Forest (Tuned):</b> MAE = 2492.93 | RMSE = 4448.39 | R² = 0.87 ✅</li>
+      <li>⚡ <b>AdaBoost (Tuned):</b> MAE = 3213.30 | RMSE = 4806.50 | R² = 0.85</li>
+    </ul>
+
+    <p>
+      Among all, the <b>Random Forest Regression Model</b> achieved the <b>best prediction accuracy of 87%</b>,
+      making it the core model for this AI application.
+    </p>
+
+    <h3>🧠 Technical Stack</h3>
+    <ul>
+      <li>⚙️ Framework: Python, Django, Scikit-learn, Pandas, NumPy</li>
+      <li>📂 Model: Random Forest Regressor (GridSearchCV tuned)</li>
+      <li>📊 Dataset: 1338 records × 6 columns</li>
+    </ul>
+
+    <h3>👨‍💻 Developed By</h3>
+    <p>
+      Project Designed & Developed by <a href="https://www.linkedin.com/in/dr-subramani-suresh-b2582b55/" target="_blank" style="color:white; text-decoration:none;"><strong> Dr. Subramani 🔗</strong> </a> 
+      AI-driven Healthcare Innovation 🧠💻
+    </p>
+  </section>
+
+  <footer>
+    <p>🧠 Powered by Machine Learning | Developed by <a href="https://www.linkedin.com/in/dr-subramani-suresh-b2582b55/" target="_blank" style="color:white; text-decoration:none;"><strong> Dr. Subramani 🔗</strong> </a>🚀</p>
+  </footer>
+
+  <button onclick="scrollToTop()" id="goTopBtn">⬆️</button>
+
+  <script>
+    const goTopBtn = document.getElementById("goTopBtn");
+
+    window.onscroll = function() {
+      if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        goTopBtn.style.display = "block";
+      } else {
+        goTopBtn.style.display = "none";
+      }
+    };
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

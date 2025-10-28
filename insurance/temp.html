@@ -1,0 +1,132 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💰 AI Insurance Cost Prediction</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(120deg, #0d47a1, #1976d2, #42a5f5);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header {
+    width: 100%;
+    text-align: center;
+    padding: 5px 5px;
+    background: url("{% static 'insurance/images/head_img.png' %}") no-repeat center center/cover;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    border-bottom: 5px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0 0 20px 20px;
+  }
+  h1 {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+  }
+    .card {
+      background: #ffffff;
+      color: #000;
+      margin-top: 40px;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      width: 350px;
+      text-align: left;
+      transition: transform 0.3s ease;
+    }
+    .card:hover { transform: translateY(-5px); }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 16px 0;
+      border: 1px solid #90caf9;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+    button {
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 48%;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover { background-color: #0d47a1; transform: scale(1.02); }
+    .btn-row { display: flex; justify-content: space-between; }
+    .clear-btn { background-color: #b71c1c; }
+    .clear-btn:hover { background-color: #d32f2f; }
+    .result {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 1.2rem;
+      background: linear-gradient(90deg, #1e88e5, #42a5f5);
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+ <header>
+  <h1>💰 AI-Powered Medical Insurance Cost Prediction</h1>
+  <p>Estimate your expected <strong>medical insurance cost</strong> using ML.</p>
+</header>
+
+  <form method="POST" class="card">
+    {% csrf_token %}
+    <h2>Enter Your Details</h2>
+
+    {% if result %}
+      <div class="result">
+        💰 <strong>Estimated Insurance Charge:</strong> Rs.{{ result }}
+      </div>
+    {% endif %}
+
+    <label>Age:</label>
+    <input type="number" name="age" value="{{ values.age }}" placeholder="Enter your age" required>
+
+    <label>Sex:</label>
+    <select name="sex" required>
+      <option value="">Select</option>
+      <option value="0" {% if values.sex == '0' %}selected{% endif %}>Female</option>
+      <option value="1" {% if values.sex == '1' %}selected{% endif %}>Male</option>
+    </select>
+
+    <label>BMI (Body Mass Index):</label>
+    <input type="number" step="0.1" name="bmi" value="{{ values.bmi }}" placeholder="e.g. 27.9" required>
+
+    <label>Children:</label>
+    <input type="number" name="children" value="{{ values.children }}" placeholder="Number of dependents" required>
+
+    <label>Smoker:</label>
+    <select name="smoker" required>
+      <option value="">Select</option>
+      <option value="0" {% if values.smoker == '0' %}selected{% endif %}>No</option>
+      <option value="1" {% if values.smoker == '1' %}selected{% endif %}>Yes</option>
+    </select>
+
+    <div class="btn-row">
+      <button type="submit" name="predict">🔍 Predict</button>
+      <button type="submit" name="clear" class="clear-btn">🧹 Clear</button>
+    </div>
+  </form>
+
+  <footer>
+    <p>🧠 Powered by Machine Learning | Developed by Superman 🚀</p>
+  </footer>
+</body>
+</html>
