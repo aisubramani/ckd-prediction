@@ -125,10 +125,16 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 # 👇 Add this line so Django can find your app-level static folders
+# For local development and app-level static folders
 STATICFILES_DIRS = [
+    BASE_DIR / "static",                      # optional: project-level static folder
     BASE_DIR / "insurance" / "static",
     BASE_DIR / "predictor" / "static",
 ]
+
+# Media (if you add uploads later)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Directory where collectstatic will collect all static files
 STATIC_ROOT = BASE_DIR / "staticfiles"
